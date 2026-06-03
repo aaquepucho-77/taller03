@@ -1096,7 +1096,8 @@ function drawChest() {
   }
 }
 
-// ══════════════════════════════════════════════
+
+/// ══════════════════════════════════════════════
 //  GINGERBREAD PLAYER
 // ══════════════════════════════════════════════
 function drawPlayer() {
@@ -1220,6 +1221,22 @@ function drawPlayer() {
 
   ctx.globalAlpha = 1;
   ctx.restore();
+}
+
+// Milestone flags
+function drawFlags() {
+  const flagXs=[1600,2900,4200,5600,WORLD-280];
+  flagXs.forEach((fx,i)=>{
+    const sx=px(fx-camX);
+    if(sx<-30||sx>W+30) return;
+    const opened = i<4?doorsOpen[i]:(chestOpen);
+    ctx.fillStyle='#7a5818'; ctx.fillRect(sx,GY-130,5,130);
+    ctx.fillStyle=opened?'#3fcf6a':(i<4?'#cf3f3f':'#f0c040');
+    ctx.fillRect(sx+5,GY-130,30,20);
+    ctx.fillStyle='#fff'; ctx.font='bold 12px monospace'; ctx.textAlign='center';
+    ctx.fillText(i<4?'?':'★',sx+20,GY-115);
+    ctx.textAlign='left';
+  });
 }
 
 // ══════════════════════════════════════════════

@@ -1097,90 +1097,129 @@ function drawChest() {
 }
 
 // ══════════════════════════════════════════════
-//  PLAYER
+//  GINGERBREAD PLAYER
 // ══════════════════════════════════════════════
 function drawPlayer() {
-  const sx=px(player.x-camX), sy=px(player.y);
-  const flip=player.face===-1;
+  const sx = px(player.x - camX),
+        sy = px(player.y);
+
+  const flip = player.face === -1;
+
   ctx.save();
-  if(flip){ ctx.translate(sx+player.w/2,0); ctx.scale(-1,1); ctx.translate(-(sx+player.w/2),0); }
-  if(invincT>0 && Math.floor(invincT/7)%2===0){ ctx.globalAlpha=.35; }
-  const wf=player.wframe;
-  const x=sx, y=sy;
 
-  // Shadow
-  ctx.fillStyle='rgba(0,0,0,.22)';
-  ctx.fillRect(x+2,GY-4,player.w-4,8);
+  if (flip) {
+    ctx.translate(sx + player.w / 2, 0);
+    ctx.scale(-1, 1);
+    ctx.translate(-(sx + player.w / 2), 0);
+  }
 
-  // Cape / back
-  ctx.fillStyle='#8a2030';
-  ctx.fillRect(x+2,y+14,6,22);
+  if (invincT > 0 && Math.floor(invincT / 7) % 2 === 0) {
+    ctx.globalAlpha = 0.35;
+  }
 
-  // Legs
-  const la=player.onGnd&&Math.abs(player.vx)>.5;
-  const loff=[0,5,-5,0][wf];
-  ctx.fillStyle='#1a3a7a';
-  ctx.fillRect(x+4,  y+36, 11, la?14+loff:14);
-  ctx.fillRect(x+17, y+36, 11, la?14-loff:14);
-  // Boots
-  ctx.fillStyle='#3a200a';
-  ctx.fillRect(x+2,  y+(la?48+loff:48), 13, 7);
-  ctx.fillRect(x+15, y+(la?48-loff:48), 13, 7);
-  ctx.fillStyle='#5a3010';
-  ctx.fillRect(x+2,  y+(la?48+loff:48), 13, 2);
-  ctx.fillRect(x+15, y+(la?48-loff:48), 13, 2);
+  const wf = player.wframe;
+  const x = sx;
+  const y = sy;
 
-  // Body/tunic
-  ctx.fillStyle='#2a72cf';
-  ctx.fillRect(x+4,y+18,24,20);
-  ctx.fillStyle='#4a92ef';
-  ctx.fillRect(x+6,y+20,10,8);
-  // Belt
-  ctx.fillStyle='#7a4a18'; ctx.fillRect(x+4,y+34,24,4);
-  ctx.fillStyle='#f0c040'; ctx.fillRect(x+14,y+34,4,4);
+  // Animación caminar
+  const walk = player.onGnd && Math.abs(player.vx) > 0.5;
+  const legOff = [0, 4, -4, 0][wf];
+  const armOff = [0, -3, 3, 0][wf];
 
-  // Head
-  ctx.fillStyle='#f0bf78'; ctx.fillRect(x+6,y+4,20,18);
-  // Cheek
-  ctx.fillStyle='#e8a060'; ctx.fillRect(x+8,y+14,4,4);
-  // Hair
-  ctx.fillStyle='#6a2e08';
-  ctx.fillRect(x+6,y+4,20,6);
-  ctx.fillRect(x+6,y+3,8,4);
-  ctx.fillRect(x+22,y+3,5,3);
-  // Eyes
-  ctx.fillStyle='#1a0a2e';
-  ctx.fillRect(x+10,y+10,4,4); ctx.fillRect(x+18,y+10,4,4);
-  ctx.fillStyle='#fff';
-  ctx.fillRect(x+11,y+10,2,2); ctx.fillRect(x+19,y+10,2,2);
-  // Mouth
-  ctx.fillStyle='#cc7040'; ctx.fillRect(x+12,y+17,8,2);
+  // Sombra
+  ctx.fillStyle = "rgba(0,0,0,.22)";
+  ctx.beginPath();
+  ctx.ellipse(
+    x + player.w / 2,
+    GY - 2,
+    player.w / 2 - 2,
+    5,
+    0,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
 
-  // Sword
-  ctx.fillStyle='#c8c8e8'; ctx.fillRect(x+28,y+20,4,20);
-  ctx.fillStyle='#f0c840'; ctx.fillRect(x+24,y+20,12,4);
-  ctx.fillStyle='#6a3810'; ctx.fillRect(x+28,y+40,4,6);
-  // Sword tip shine
-  ctx.fillStyle='#ffffff'; ctx.fillRect(x+29,y+22,2,4);
+  // Color galleta
+  ctx.fillStyle = "#c68642";
 
-  ctx.globalAlpha=1;
+  // Cabeza
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 10, 10, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Cuerpo
+  ctx.fillRect(x + 8, y + 18, 16, 20);
+
+  // Brazos
+  ctx.fillRect(x - 2, y + 20 + armOff, 10, 6);
+  ctx.fillRect(x + 24, y + 20 - armOff, 10, 6);
+
+  // Piernas
+  ctx.fillRect(x + 9, y + 38, 6, 14 + legOff);
+  ctx.fillRect(x + 17, y + 38, 6, 14 - legOff);
+
+  // Decoración de glaseado
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 2;
+
+  // Brazos
+  ctx.beginPath();
+  ctx.moveTo(x + 2, y + 23 + armOff);
+  ctx.lineTo(x + 6, y + 23 + armOff);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x + 26, y + 23 - armOff);
+  ctx.lineTo(x + 30, y + 23 - armOff);
+  ctx.stroke();
+
+  // Piernas
+  ctx.beginPath();
+  ctx.moveTo(x + 9, y + 44);
+  ctx.lineTo(x + 15, y + 44);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x + 17, y + 44);
+  ctx.lineTo(x + 23, y + 44);
+  ctx.stroke();
+
+  // Ojos
+  ctx.fillStyle = "#222";
+  ctx.beginPath();
+  ctx.arc(x + 12, y + 8, 1.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(x + 20, y + 8, 1.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Sonrisa
+  ctx.strokeStyle = "#222";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 12, 4, 0.2, Math.PI - 0.2);
+  ctx.stroke();
+
+  // Botones de caramelo
+  ctx.fillStyle = "#ff3b3b";
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 23, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#33aaff";
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 29, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#66dd66";
+  ctx.beginPath();
+  ctx.arc(x + 16, y + 35, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 1;
   ctx.restore();
-}
-
-// Milestone flags
-function drawFlags() {
-  const flagXs=[1600,2900,4200,5600,WORLD-280];
-  flagXs.forEach((fx,i)=>{
-    const sx=px(fx-camX);
-    if(sx<-30||sx>W+30) return;
-    const opened = i<4?doorsOpen[i]:(chestOpen);
-    ctx.fillStyle='#7a5818'; ctx.fillRect(sx,GY-130,5,130);
-    ctx.fillStyle=opened?'#3fcf6a':(i<4?'#cf3f3f':'#f0c040');
-    ctx.fillRect(sx+5,GY-130,30,20);
-    ctx.fillStyle='#fff'; ctx.font='bold 12px monospace'; ctx.textAlign='center';
-    ctx.fillText(i<4?'?':'★',sx+20,GY-115);
-    ctx.textAlign='left';
-  });
 }
 
 // ══════════════════════════════════════════════
